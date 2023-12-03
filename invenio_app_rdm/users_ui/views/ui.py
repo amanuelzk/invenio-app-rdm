@@ -15,7 +15,7 @@ from flask_menu import current_menu
 from invenio_i18n import lazy_gettext as _
 
 from ..searchapp import search_app_context
-from .dashboard import communities, requests, uploads
+from .dashboard import communities, requests, uploads,saved
 
 
 #
@@ -63,7 +63,10 @@ def create_ui_blueprint(app):
         routes["requests"],
         view_func=requests,
     )
-
+    blueprint.add_url_rule(
+        routes["saved"],
+        view_func=saved,
+    )
     @blueprint.before_app_first_request
     def register_menus():
         """Register community menu items."""
@@ -83,6 +86,12 @@ def create_ui_blueprint(app):
             text=_("My requests"),
             order=3,
         )
+        user_dashboard.submenu("saved").register(
+            "invenio_app_rdm_users.saved",
+            text=_("My saved"),
+            order=4,
+        )
+
 
     # Register context processor
     blueprint.app_context_processor(search_app_context)
