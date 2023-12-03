@@ -38,6 +38,9 @@ import {
   DepositFormApp,
   CommunityHeader,
   SaveButton,
+  OriginField,
+  AuthorDeclarationField,
+  ConsentField,
 } from "@js/invenio_rdm_records";
 import { FundingField } from "@js/invenio_vocabularies";
 import { Card, Container, Grid, Ref, Sticky } from "semantic-ui-react";
@@ -117,10 +120,7 @@ export class RDMDepositForm extends Component {
         </Overridable>
 
         <Overridable id="InvenioAppRdm.Deposit.CommunityHeader.container">
-          <CommunityHeader
-            imagePlaceholderLink="/static/images/square-placeholder.png"
-            record={record}
-          />
+          <CommunityHeader imagePlaceholderLink="/static/images/square-placeholder.png" />
         </Overridable>
         <Container id="rdm-deposit-form" className="rel-mt-1">
           <Grid className="mt-25">
@@ -167,6 +167,7 @@ export class RDMDepositForm extends Component {
                     "metadata.resource_type",
                     "metadata.title",
                     "metadata.additional_titles",
+                    "custom_fields.rik_origin",
                     "metadata.publication_date",
                     "metadata.creators",
                     "metadata.description",
@@ -231,6 +232,20 @@ export class RDMDepositForm extends Component {
                       required
                     />
                   </Overridable>
+
+                  {/* Origin Field for RIK */}
+                  {preselectedCommunity != null && preselectedCommunity.slug == "rik" ? (
+                  <Overridable
+                    id="InvenioAppRdm.Deposit.OriginField.container"
+                    vocabularies={this.vocabularies}
+                    fieldPath="custom_fields.rik_origin"
+                    record={record}
+                  >
+                    <OriginField
+                      fieldPath="custom_fields.rik_origin"
+                      recordUI={record.ui}
+                    />
+                  </Overridable>) : (<></>)}
 
                   <Overridable
                     id="InvenioAppRdm.Deposit.PublicationDateField.container"
@@ -387,7 +402,8 @@ export class RDMDepositForm extends Component {
                       }
                     />
                   </Overridable>
-
+                  {/* DatesField not in RIK */}
+                  {preselectedCommunity == null || preselectedCommunity.slug != "rik" ? (
                   <Overridable
                     id="InvenioAppRdm.Deposit.DateField.container"
                     vocabularies={this.vocabularies}
@@ -398,7 +414,7 @@ export class RDMDepositForm extends Component {
                       options={this.vocabularies.metadata.dates}
                       showEmptyValue
                     />
-                  </Overridable>
+                  </Overridable>) : (<></>)}
 
                   <Overridable
                     id="InvenioAppRdm.Deposit.VersionField.container"
@@ -415,6 +431,8 @@ export class RDMDepositForm extends Component {
                   </Overridable>
                 </AccordionField>
               </Overridable>
+              {/* Funding not in RIK */}
+              {preselectedCommunity == null || preselectedCommunity.slug != "rik" ? (
               <Overridable
                 id="InvenioAppRdm.Deposit.AccordionFieldFunding.container"
                 ui={this.accordionStyle}
@@ -503,7 +521,9 @@ export class RDMDepositForm extends Component {
                     />
                   </Overridable>
                 </AccordionField>
-              </Overridable>
+              </Overridable>) : (<></>)}
+              {/* Alternate Identifiers not in RIK*/}
+              {preselectedCommunity == null || preselectedCommunity.slug != "rik" ? (
               <Overridable
                 id="InvenioAppRdm.Deposit.AccordionFieldAlternateIdentifiers.container"
                 vocabularies={this.vocabularies}
@@ -527,8 +547,9 @@ export class RDMDepositForm extends Component {
                     />
                   </Overridable>
                 </AccordionField>
-              </Overridable>
-
+              </Overridable>) : (<></>)}
+              {/* Related Works not in RIK*/}
+              {preselectedCommunity == null || preselectedCommunity.slug != "rik" ? (
               <Overridable
                 id="InvenioAppRdm.Deposit.AccordionFieldRelatedWorks.container"
                 vocabularies={this.vocabularies}
@@ -550,7 +571,9 @@ export class RDMDepositForm extends Component {
                     />
                   </Overridable>
                 </AccordionField>
-              </Overridable>
+              </Overridable>) : (<></>)}
+              {/* References not in RIK */}
+              {preselectedCommunity == null || preselectedCommunity.slug != "rik" ? (
               <Overridable
                 id="InvenioAppRdm.Deposit.AccordionFieldReferences.container"
                 vocabularies={this.vocabularies}
@@ -568,9 +591,46 @@ export class RDMDepositForm extends Component {
                     <ReferencesField fieldPath="metadata.references" showEmptyValue />
                   </Overridable>
                 </AccordionField>
-              </Overridable>
+              </Overridable>) : (<></>)}
+
+              {/* Indigenous Knowledge Section only for RIK*/}
+              {preselectedCommunity != null && preselectedCommunity.slug == "rik" ? (
+              <Overridable
+                id="InvenioAppRdm.Deposit.AccordionFieldIndigenousKnowledge.container"
+                vocabularies={this.vocabularies}
+              >
+                <AccordionField
+                  includesPaths={["custom_fields.rik_auth_decl", "custom_fields.rik_consent",]}
+                  active
+                  label={i18next.t("Indigenous Knowledge")}
+                >
+                  <Overridable
+                    id="InvenioAppRdm.Deposit.AuthorDeclarationField.container"
+                    vocabularies={this.vocabularies}
+                    fieldPath="custom_fields.rik_auth_decl"
+                    record={record}
+                  >
+                    <AuthorDeclarationField
+                      fieldPath="custom_fields.rik_auth_decl"
+                      recordUI={record.ui}
+                    />
+                  </Overridable>
+
+                  <Overridable
+                    id="InvenioAppRdm.Deposit.ConsentField.container"
+                    vocabularies={this.vocabularies}
+                    fieldPath="custom_fields.rik_consent"
+                    record={record}
+                  >
+                    <ConsentField
+                      fieldPath="custom_fields.rik_consent"
+                      recordUI={record.ui}
+                    />
+                  </Overridable>
+                </AccordionField>
+              </Overridable>) : (<></>)}
               {!_isEmpty(customFieldsUI) && (
-                <Overridable
+              <Overridable
                   id="InvenioAppRdm.Deposit.CustomFields.container"
                   customFieldsUI={customFieldsUI}
                 >

@@ -151,6 +151,14 @@ export const RDMEmptyResults = (props) => {
           </Header.Content>
         </Header>
         <Divider hidden />
+        {/* RIK new user Button */}
+        <Button
+          positive
+          icon="upload"
+          floated="right"
+          href="/uploads/new?community=rik"
+          content={i18next.t("New RIK upload")}
+        />
         <Button
           positive
           icon="upload"
@@ -181,6 +189,15 @@ export const DashboardUploadsSearchLayout = DashboardSearchLayoutHOC({
       icon="upload"
       href="/uploads/new"
       content={i18next.t("New upload")}
+      floated="right"
+    />
+  ),
+  newBtn: (
+    <Button
+      positive
+      icon="upload"
+      href="/uploads/new?community=rik"
+      content={i18next.t("New RIK upload")}
       floated="right"
     />
   ),
