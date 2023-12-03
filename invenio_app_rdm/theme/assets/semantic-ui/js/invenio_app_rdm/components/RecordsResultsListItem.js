@@ -9,14 +9,51 @@ import _get from "lodash/get";
 import _truncate from "lodash/truncate";
 import React, { Component } from "react";
 import Overridable from "react-overridable";
+import {http} from "react-invenio-forms"
 import { SearchItemCreators } from "../utils";
 import PropTypes from "prop-types";
-import { Item, Label, Icon } from "semantic-ui-react";
+import { Item, Label, Icon,Portal, Button,Popup, Segment } from "semantic-ui-react";
 import { buildUID } from "react-searchkit";
 import { CompactStats } from "./CompactStats";
-
 class RecordsResultsListItem extends Component {
+  state = { open: false }
+
+  handleClose = () => this.setState({ open: true })
+  handleOpen = () => this.setState({ open: false })
+
   render() {
+    const saved = async (id) => {
+     
+      this.handleOpen()
+     const data = {
+      
+       //send the data
+       record_id: JSON.stringify(id),
+      };
+       console.log(JSON.stringify(data))
+      let h = {
+       "Accept": "application/json",
+       "Content-Type": "application/json",
+      //  "Authorization": "Bearer"  + token
+      }
+     
+      await http
+        .post(
+           'api/records/saved',
+         data,
+          {
+            h: {
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        )
+        .then((resp) => {
+        console.log(resp)
+        });
+    };
+ 
     const { currentQueryState, result, key, appName } = this.props;
 
     const accessStatusId = _get(result, "ui.access_status.id", "open");
@@ -57,6 +94,7 @@ class RecordsResultsListItem extends Component {
     const filters = currentQueryState && Object.fromEntries(currentQueryState.filters);
     const allVersionsVisible = filters?.allversions;
     const numOtherVersions = versions.index - 1;
+    const timeoutLength = 1000
 
     // Derivatives
     const viewLink = `/records/${result.id}`;
@@ -103,6 +141,21 @@ class RecordsResultsListItem extends Component {
             </Item.Header>
             <Item className="creatibutors">
               <SearchItemCreators creators={creators} />
+              {/* <button class="ui button"  
+                         positive
+                          onClick = {()=>saved(result.id)}>Save</button> */}
+              <Popup
+            trigger={<Button   onClick = {()=>saved(result.id)} content='Saved' />}
+            content={'Records saved successfully'
+              
+            }
+            on='click'
+            open={this.state.isOpen}
+            onClose={this.handleClose}
+            onOpen={this.handleOpen}
+            position='top right'
+          />
+             
             </Item>
             <Item.Description>
               {_truncate(descriptionStripped, { length: 350 })}

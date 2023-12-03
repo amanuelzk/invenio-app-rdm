@@ -687,6 +687,7 @@ APP_RDM_USER_DASHBOARD_ROUTES = {
     "uploads": "/me/uploads",
     "communities": "/me/communities",
     "requests": "/me/requests",
+     "saved":"/me/saved"
 }
 
 APP_RDM_ROUTES = {
