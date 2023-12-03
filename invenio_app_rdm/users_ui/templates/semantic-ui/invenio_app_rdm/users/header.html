@@ -23,6 +23,10 @@
       </div>
     </div>
     {% if active_dashboard_menu_item == "uploads" %}
+      <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new?community=rik">
+        <i class="upload icon" aria-hidden="true"></i>
+        {{ _('New RIK upload') }}
+      </a>
       <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new">
         <i class="upload icon" aria-hidden="true"></i>
         {{ _('New upload') }}
