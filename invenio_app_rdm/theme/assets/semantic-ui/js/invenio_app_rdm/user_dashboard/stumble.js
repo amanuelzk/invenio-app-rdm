@@ -6,7 +6,7 @@ import { i18next } from "@translations/invenio_app_rdm/i18next";
 
 export const StumbleItem = (result) => {
   console.log(result.result)
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
   const friendOptions = [
     {
       key: "publication",
