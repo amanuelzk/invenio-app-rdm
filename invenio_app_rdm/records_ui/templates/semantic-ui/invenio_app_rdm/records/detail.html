@@ -57,8 +57,8 @@
                 href="{{ url_for('invenio_app_rdm_communities.communities_detail', pid_value=community.slug) }}"> {{ community.metadata.title }}</a>
               {% if is_community_restricted %}
                 <span class="ui label horizontal small access-status restricted rel-ml-1"
-                      title="{{ _('Community visibility') }}"
-                      data-tooltip="{{ _('The community is restricted to users with access.') }}"
+                      title="{{ _('Collection visibility') }}"
+                      data-tooltip="{{ _('The collection is restricted to users with access.') }}"
                       data-inverted="">
                   <i class="icon ban" aria-hidden="true"></i> {{ _("Restricted") }}
                 </span>
