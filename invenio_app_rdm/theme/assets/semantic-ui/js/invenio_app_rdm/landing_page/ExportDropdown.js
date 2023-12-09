@@ -43,10 +43,8 @@ export class ExportDropdown extends Component {
 
     try {
       const response = await this.cancellableFetch.promise;
-       console.log(response.data.aggregations.resource_type)
       this.setState({ data: response.data.hits, isLoading: false });
     } catch (error) {
-      console.error(error);
       this.setState({ error: error.response.data.message, isLoading: false });
     }}
   render() {
@@ -66,7 +64,9 @@ export class ExportDropdown extends Component {
       
       <Grid>
         <Grid.Column width={14}>
-        <StumbleItem result={data.hits}/>
+        {data.hits && data.hits.length > 0 && (
+       <StumbleItem result={data.hits}  /> 
+        )}  
         </Grid.Column>
         <Grid.Column width={11}>
           <Dropdown

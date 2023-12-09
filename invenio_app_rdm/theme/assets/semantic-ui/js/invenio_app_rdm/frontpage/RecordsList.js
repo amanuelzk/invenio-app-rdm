@@ -127,7 +127,9 @@ export class RecordsList extends Component {
 
     return (
       <>
-        <StumbleItem result={dataStumble.hits}  appName={appName} />
+      {dataStumble.hits && dataStumble.hits.length > 0 && (
+  <StumbleItem result={dataStumble.hits} appName={appName} />
+)}
         {isLoading && this.renderPlaceHolder()}
 
         {!isLoading && !error && !isEmpty(listItems) && (
