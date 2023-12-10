@@ -59,7 +59,7 @@ export const StumbleItem = (result) => {
  
   return (
     <div>
-      <section className="content1 cid-rVMdmjU4Mx" style={{backgroundImage: 'url(static/images/gresis-patter-3.jpg)', backgroundSize: 'contain', backgroundRepeatX: 'repeat', backgroundBlendMode: 'darken', backgroundColor: '#b55e2e', backgroundAttachment: 'fixed',  marginLeft: '-17%', width: '185%', paddingBottom: '20%', }}>
+      <section className="content1 cid-rVMdmjU4Mx" style={{backgroundImage: 'url(static/images/gresis-patter-3.jpg)', backgroundSize: 'contain', backgroundRepeatX: 'repeat', backgroundBlendMode: 'darken', backgroundColor: '#b55e2e', backgroundAttachment: 'fixed',  marginLeft: '-17%', width: '185%', paddingBottom: '30%', }}>
         <div className="container" style={{padding: 30}}>
           <div className="row justify-content-end">
             <div className="title__block col-lg-12">
