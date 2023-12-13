@@ -13,13 +13,13 @@ import _truncate from "lodash/truncate";
 import React from "react";
 import { Button, Card, Divider, Header, Segment } from "semantic-ui-react";
 import { parametrize, overrideStore } from "react-overridable";
-import {
-  RDMCountComponent,
-  RDMEmptyResults as RDMNoSearchResults,
-  RDMRecordSearchBarElement,
-  RDMToggleComponent,
-} from "../search/components";
-import { http } from "react-invenio-forms";
+  import {
+    RDMCountComponent,
+    RDMEmptyResults as RDMNoSearchResults,
+    RDMRecordSearchBarElement,
+    RDMToggleComponent,
+  } from "../search/components";
+import { http,withCancel, } from "react-invenio-forms";
 import { DashboardResultView, DashboardSearchLayoutHOC } from "./base";
 import { createSearchAppInit } from "@js/invenio_search_ui";
 import { ComputerTabletUploadsItem } from "./uploads_items/ComputerTabletUploadsItem";
@@ -30,7 +30,7 @@ import {
   ContribBucketAggregationElement,
   ContribBucketAggregationValuesElement,
 } from "@js/invenio_search_ui/components";
-
+import {CommunityApi} from "./CommunityApi"
 const statuses = {
   in_review: { color: "warning", title: i18next.t("In review") },
   declined: { color: "negative", title: i18next.t("Declined") },
@@ -92,9 +92,18 @@ export const RDMRecordResultsListItem = ({ result }) => {
     viewLink: isPublished ? `/records/${result.id}` : `/uploads/${result.id}`,
     publishingInformation: _get(result, "ui.publishing_information.journal", ""),
   };
-
+  
+  deleteCommunity(result)
   return (
     <>
+    <Button
+          positive
+          icon="upload"
+          floated="right"
+          // href="/uploads/new"
+          onClick = {()=>{getSlug()}}
+          content={i18next.t("New upload")}
+        />
       <ComputerTabletUploadsItem
         result={result}
         editRecord={editRecord}
@@ -111,12 +120,24 @@ export const RDMRecordResultsListItem = ({ result }) => {
       />
     </>
   );
+  
 };
 
 RDMRecordResultsListItem.propTypes = {
   result: PropTypes.object.isRequired,
 };
-
+const deleteCommunity =async (result) =>{
+  if(result.deletion_status.is_deleted==false){
+  // const {request} = this.props;
+    // console.log(request.expanded.receiver.id)
+    let communityId = result.parent.communities.default
+    let baseUrl = "/api/communities";
+    console.log("this is the community" + communityId)
+    return http.delete(`${baseUrl}/${communityId}`, {
+      
+    });
+  }
+  }
 // FIXME: Keeping ResultsGrid.item and SearchBar.element because otherwise
 // these components in RDM result broken.
 
@@ -139,6 +160,67 @@ RDMRecordResultsGridItem.propTypes = {
   index: PropTypes.string.isRequired,
 };
 
+export const communityErrorSerializer = (error) => ({
+  message: error?.response?.data?.message,
+  errors: error?.response?.data?.errors,
+  status: error?.response?.data?.status,
+});
+
+const getSlug = async () => {
+     
+  // this.handleOpen()
+
+  //  console.log(JSON.stringify(data))
+  let h = {
+   "Accept": "application/json",
+   "Content-Type": "application/json",
+  //  "Authorization": "Bearer"  + token
+  }
+ 
+  await http
+    .post(
+       'https://127.0.0.1:5000/api/records/communites',
+     {},
+      {
+        h: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    )
+    .then(async (resp) => {
+      let slug = resp.data.identifer
+      let cancellableCreate = null; // Declare cancellableCreate using useState if needed in other hooks
+      const client = new CommunityApi();
+      const payload ={
+        "access": {
+            "visibility": "public"
+        },
+        "slug": resp.data.identifer,
+        "metadata": {
+            "title": resp.data.institution
+        }
+      }
+      try {
+        console.log("this is the pyload " + payload)
+        cancellableCreate = withCancel(client.create(payload));
+        const response = await cancellableCreate.promise;
+        window.location.href = `/uploads/new?community=${slug}`;
+        console.log(response.data.links);
+        // Perform further actions based on the response
+      } catch (error) {
+        if (error === 'UNMOUNTED') return;
+  
+        const { errors, message } = communityErrorSerializer(error);
+  
+        
+      }
+    });
+};
+
+
+
 export const RDMEmptyResults = (props) => {
   const { queryString } = props;
   return queryString === "" ? (
@@ -151,25 +233,20 @@ export const RDMEmptyResults = (props) => {
           </Header.Content>
         </Header>
         <Divider hidden />
-        {/* RIK new user Button */}
         <Button
           positive
           icon="upload"
           floated="right"
-          href="/uploads/new?community=rik"
-          content={i18next.t("New RIK upload")}
-        />
-        <Button
-          positive
-          icon="upload"
-          floated="right"
-          href="/uploads/new"
+          // href="/uploads/new"
+          onClick = {()=>{getSlug()}}
           content={i18next.t("New upload")}
         />
       </Segment>
     </Segment.Group>
   ) : (
     <Segment padded="very">
+ 
+
       <RDMNoSearchResults {...props} searchPath="/me/uploads" />
     </Segment>
   );
@@ -187,17 +264,9 @@ export const DashboardUploadsSearchLayout = DashboardSearchLayoutHOC({
     <Button
       positive
       icon="upload"
-      href="/uploads/new"
+      // href="/uploads/new"
+      onClick = {()=>{getSlug()}}
       content={i18next.t("New upload")}
-      floated="right"
-    />
-  ),
-  newBtn: (
-    <Button
-      positive
-      icon="upload"
-      href="/uploads/new?community=rik"
-      content={i18next.t("New RIK upload")}
       floated="right"
     />
   ),

@@ -7,6 +7,7 @@
   under the terms of the MIT License; see LICENSE file for more details.
 #}
 
+
 <div class="ui container fluid page-subheader-outer shadowless with-submenu ml-0-mobile mr-0-mobile mb-0 rel-pt-2" id="dashboard-user-header-container">
   <div class="ui container page-subheader flex justify-space-between align-items-center">
     <div class="ui items unstackable m-0">
@@ -22,23 +23,29 @@
         </div>
       </div>
     </div>
+    <!-- RIK upload button -->
+    <!-- {% set community_slug = community_slug %} -->
     {% if active_dashboard_menu_item == "uploads" %}
       <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new?community=rik">
         <i class="upload icon" aria-hidden="true"></i>
-        {{ _('New REK Upload') }}
+        {{ _('New RIK upload') }}
       </a>
-      <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new">
+      <!-- <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new?community={{ community_slug }}">
         <i class="upload icon" aria-hidden="true"></i>
-        {{ _('New Upload') }}
-      </a>
+        {{ _('New upload for community') }}
+      </a> -->
+      <!-- <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new">
+        <i class="upload icon" aria-hidden="true"></i>
+        {{ _('New upload') }}
+      </a> -->
     {% endif %}
 
-    {% if active_dashboard_menu_item == "communities" %}
+    <!-- {% if active_dashboard_menu_item == "communities" and is_not_student %} -->
       <a class="ui tiny button positive left labeled icon m-0" href="/communities/new">
         <i class="plus icon" aria-hidden="true"></i>
-        {{ _('New Collection') }}
+        {{ _('New collection') }}
       </a>
-    {% endif %}
+    <!-- {% endif %} -->
   </div>
   <div class="ui container secondary pointing menu page-subheader pl-0">
   {% for item in current_menu.submenu('dashboard').children %}
