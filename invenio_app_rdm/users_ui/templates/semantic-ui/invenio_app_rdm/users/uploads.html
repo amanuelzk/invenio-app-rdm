@@ -16,10 +16,12 @@
 {%- endblock javascript %}
 
 {%- block user_dashboard_body %}
+<div id="react-root"></div>
   <div
     id="invenio-search-config"
+    
     data-invenio-search-config='{{ search_app_rdm_user_uploads_config(app_id="InvenioAppRdm.DashboardUploads") | tojson }}'
   >
-
+ 
 </div>
 {%- endblock user_dashboard_body %}
