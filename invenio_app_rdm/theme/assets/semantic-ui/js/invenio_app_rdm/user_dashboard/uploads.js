@@ -6,6 +6,8 @@
 //
 // Invenio App RDM is free software; you can redistribute it and/or modify it
 // under the terms of the MIT License; see LICENSE file for more details.
+import ReactDOM from 'react-dom';
+
 
 import { i18next } from "@translations/invenio_app_rdm/i18next";
 import _get from "lodash/get";
@@ -96,14 +98,6 @@ export const RDMRecordResultsListItem = ({ result }) => {
   deleteCommunity(result)
   return (
     <>
-    <Button
-          positive
-          icon="upload"
-          floated="right"
-          // href="/uploads/new"
-          onClick = {()=>{getSlug()}}
-          content={i18next.t("New upload")}
-        />
       <ComputerTabletUploadsItem
         result={result}
         editRecord={editRecord}
@@ -272,6 +266,21 @@ export const DashboardUploadsSearchLayout = DashboardSearchLayoutHOC({
   ),
   appName: appName,
 });
+export const UplodButton = () => {
+  
+  return (  
+      <>
+      <Button
+          positive
+          icon="upload"
+          floated="right"
+          // href="/uploads/new"
+          onClick = {()=>{getSlug()}}
+          content={i18next.t("New upload")}
+        />
+      </>
+  )
+};
 
 const ContribSearchAppFacetsWithConfig = parametrize(ContribSearchAppFacets, {
   toggle: true,
@@ -302,3 +311,4 @@ createSearchAppInit(
   "invenio-search-config",
   true
 );
+ReactDOM.render(<UplodButton />, document.getElementById('react-root'));
