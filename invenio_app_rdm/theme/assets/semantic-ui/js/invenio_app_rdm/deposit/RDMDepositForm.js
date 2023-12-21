@@ -593,42 +593,6 @@ export class RDMDepositForm extends Component {
                 </AccordionField>
               </Overridable>) : (<></>)}
 
-              {/* Indigenous Knowledge Section only for RIK*/}
-              {preselectedCommunity != null && preselectedCommunity.slug == "rik" ? (
-              <Overridable
-                id="InvenioAppRdm.Deposit.AccordionFieldIndigenousKnowledge.container"
-                vocabularies={this.vocabularies}
-              >
-                <AccordionField
-                  includesPaths={["custom_fields.rik_auth_decl", "custom_fields.rik_consent",]}
-                  active
-                  label={i18next.t("Indigenous Knowledge")}
-                >
-                  <Overridable
-                    id="InvenioAppRdm.Deposit.AuthorDeclarationField.container"
-                    vocabularies={this.vocabularies}
-                    fieldPath="custom_fields.rik_auth_decl"
-                    record={record}
-                  >
-                    <AuthorDeclarationField
-                      fieldPath="custom_fields.rik_auth_decl"
-                      recordUI={record.ui}
-                    />
-                  </Overridable>
-
-                  <Overridable
-                    id="InvenioAppRdm.Deposit.ConsentField.container"
-                    vocabularies={this.vocabularies}
-                    fieldPath="custom_fields.rik_consent"
-                    record={record}
-                  >
-                    <ConsentField
-                      fieldPath="custom_fields.rik_consent"
-                      recordUI={record.ui}
-                    />
-                  </Overridable>
-                </AccordionField>
-              </Overridable>) : (<></>)}
               {!_isEmpty(customFieldsUI) && (
               <Overridable
                   id="InvenioAppRdm.Deposit.CustomFields.container"
