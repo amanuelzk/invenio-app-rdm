@@ -20,4 +20,17 @@
   </section>
 {% endif %}
 
-{{ show_add_descriptions(record.ui.additional_descriptions) if record.ui.additional_descriptions }}
+<section id="description" class="rel-mt-2" aria-label="{{ _('Translated descriptions') }}">
+
+  <div class="ui accordion panel mb-10" href="#collapsablePreview">
+    <div role="button" class="title panel-heading trigger" tabindex="0" aria-expanded="false" >
+      <h3>{{ _('Translated Descriptions') }} 
+        <i class="ui angle right icon"></i>
+      </h3>
+    </div>
+    <div role="region" class="content">
+      {{ show_add_descriptions(record.ui.additional_descriptions) if record.ui.additional_descriptions }}
+    </div>
+
+  </div>
+</section>
