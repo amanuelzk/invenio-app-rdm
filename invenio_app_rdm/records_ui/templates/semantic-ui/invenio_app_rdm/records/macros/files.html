@@ -65,7 +65,7 @@
 
 
 {%- macro file_list(
-    files, pid, is_preview, include_deleted,
+    files, pid, is_preview, include_deleted,content_url,
     record=None,
     with_preview=true,
     download_endpoint='invenio_app_rdm_records.record_file_download',
@@ -106,7 +106,22 @@
       <tr>
         <td class="ten wide">
           <div>
+            {% if file.mimetype == 'video/mp4' %}
+            <video controls style="width: 100%; display: block;">
+                <source src="{{ file_url_download }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
             <a href="{{ file_url_download }}">{{ file.key }}</a>
+            <a role="button" class="ui compact mini button" href="{{ file_url_download }}">
+                <i class="download icon" aria-hidden="true"></i>{{_('Download')}}
+            </a>
+            <p>{{ file.size|filesizeformat(binary=binary_sizes) }}</p>
+           
+        {% else %}
+        <a href="{{ file_url_download }}">{{ file.key }}</a>
+        {% endif %}
+        
+            
           </div>
           <small class="ui text-muted font-tiny">{{ file.checksum }}
           <div class="ui icon inline-block" data-tooltip="{{_('This is the file fingerprint (checksum), which can be used to verify the file integrity.')}}">
@@ -114,6 +129,8 @@
           </div>
           </small>
         </td>
+       
+        {% if file.mimetype != 'video/mp4' %}
         <td>{{ file.size|filesizeformat(binary=binary_sizes) }}</td>
         <td class="right aligned">
           <span>
@@ -126,6 +143,7 @@
               <i class="download icon" aria-hidden="true"></i>{{_('Download')}}
             </a>
           </span>
+          {% endif %}
         </td>
       </tr>
     {% endfor %}
