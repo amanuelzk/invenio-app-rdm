@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Dropdown, Modal, Header, Button } from "semantic-ui-react";
 import {http} from "react-invenio-forms"
 import _ from 'lodash'
 import { i18next } from "@translations/invenio_app_rdm/i18next";
-
+import ReactDOM from "react-dom"
 export const StumbleItem = (result) => {
   console.log(result.result)
   const [selectedOption, setSelectedOption] = useState(null);
@@ -73,6 +73,7 @@ export const StumbleItem = (result) => {
               fluid
               selection
               options={friendOptions}
+
               value={selectedOption}
               onChange={handleOptionChange}
             />
@@ -82,3 +83,104 @@ export const StumbleItem = (result) => {
     </div>
   );
 }
+
+
+
+export const Stumble = () => {
+
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [data, setData] = useState({ hits: [] });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const friendOptions = [
+    {
+      key: "publication",
+      text: "Publication",
+      value: "publication",
+    },
+    {
+      key: "Audio/Video",
+      text: "Audio/Video",
+      value: "Audio/Video",
+    },
+    {
+      key: "all",
+      text: "Full Stumble",
+      value: "all",
+    },
+  ];
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await http.get("/api/records?sort=newest&size=20", {
+        headers: {
+          Accept: "application/vnd.inveniordm.v1+json",
+        },
+      });
+      setData(response.data);
+      console.log(response)
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setError(error.response.data.message);
+      setIsLoading(false);
+    }
+  };
+
+  const handleOptionChange = (event, { value }) => {
+    console.log(value)
+    
+ 
+       setSelectedOption(value);
+       
+       if(value==="publication"){
+        const publicationLinks = data.hits.hits.filter(obj => {
+          const resourceType = obj.metadata.resource_type.id;
+          return (
+            resourceType.includes("publication") ||
+            resourceType.split('-').includes("publication")
+          );
+        })
+        .map(obj => obj.id);
+        let shuffle =   _.shuffle(publicationLinks)
+        console.log(shuffle)
+        window.location = `/records/${shuffle[0]}  `;
+        }else if(value==="Audio/Video"){
+          const publicationLinks = data.hits.hits.filter(obj => obj.metadata.resource_type.id === "video")
+          .map(obj => obj.id);;
+            let shuffle= _.shuffle(publicationLinks)
+
+            window.location = `/records/${shuffle[0]}  `;
+        }else{
+          const publicationLinks = data.hits.hits
+            .map(obj => obj.id);
+           let shuffle= _.shuffle(publicationLinks)
+            window.location = `/records/${shuffle[0]}  `;
+        }
+  };
+
+ 
+  return (
+    <div>
+     
+          <Dropdown
+              placeholder={i18next.t("Stumble!")}
+              fluid
+              selection
+              options={friendOptions}
+              value={selectedOption}
+              onChange={handleOptionChange}
+            />
+         
+    </div>
+  );
+}
+ReactDOM.render(
+  <Stumble />,
+  document.getElementById("react-stumbleNav")
+);
