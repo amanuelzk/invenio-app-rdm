@@ -115,6 +115,8 @@
 
             {%- block navbar_right %}
               <div class="right menu item">
+                <div id="react-stumbleNav" style="margin-right: 5px; padding: 10px;"></div>
+
                 {%- if config.ACCOUNTS and current_user.is_authenticated %}
                   {% for item in current_menu.submenu('notifications').children|sort(attribute='order') if item.visible recursive %}
                     <div class="{{'item active' if item.active else 'item' }} inbox">

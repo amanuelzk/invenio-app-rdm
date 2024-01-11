@@ -22,23 +22,14 @@
         </div>
       </div>
     </div>
-    {% if active_dashboard_menu_item == "uploads" %}
-      <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new?community=rik">
-        <i class="upload icon" aria-hidden="true"></i>
-        {{ _('New REK Upload') }}
-      </a>
-      <a class="ui tiny button positive left labeled icon m-0" href="/uploads/new">
-        <i class="upload icon" aria-hidden="true"></i>
-        {{ _('New Upload') }}
-      </a>
-    {% endif %}
-
-    {% if active_dashboard_menu_item == "communities" %}
+    <div id="react-stumbleNav" style="margin-right: 20px; padding: 10px;"></div>
+   
+ {% if active_dashboard_menu_item == "communities" %}
       <a class="ui tiny button positive left labeled icon m-0" href="/communities/new">
         <i class="plus icon" aria-hidden="true"></i>
-        {{ _('New Collection') }}
+        {{ _('New community') }}
       </a>
-    {% endif %}
+    {% endif %} 
   </div>
   <div class="ui container secondary pointing menu page-subheader pl-0">
   {% for item in current_menu.submenu('dashboard').children %}
