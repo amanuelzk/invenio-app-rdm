@@ -9,49 +9,21 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Grid, Dropdown, Button } from "semantic-ui-react";
 import { i18next } from "@translations/invenio_app_rdm/i18next";
-import {StumbleItem} from "../user_dashboard/stumble"
-import { withCancel, http } from "react-invenio-forms";
-import _ from 'lodash'
-
 export class ExportDropdown extends Component {
   constructor(props) {
     super(props);
     const { formats } = this.props;
     this.state = {
-      data: { hits: [] },
+     
       selectedFormatUrl: formats[0]?.export_url,
     };
   }
   
-  componentDidMount() {
-    this.fetchData();
-  }
-  
-  componentWillUnmount() {
-    this.cancellableFetch && this.cancellableFetch.cancel();
-  }
-  fetchData = async () => {
-    this.setState({ isLoading: true });
-
-    this.cancellableFetch = withCancel(
-      http.get( "/api/records?sort=newest&size=20", {
-        headers: {
-          Accept: "application/vnd.inveniordm.v1+json",
-        },
-      })
-    );
-
-    try {
-      const response = await this.cancellableFetch.promise;
-      this.setState({ data: response.data.hits, isLoading: false });
-    } catch (error) {
-      this.setState({ error: error.response.data.message, isLoading: false });
-    }}
+ 
   render() {
     const { formats } = this.props;
-    const { selectedFormatUrl ,data} = this.state;
-    const record = data.hits
-    _.shuffle(record)
+    const { selectedFormatUrl } = this.state;
+   
     const exportOptions = formats.map((option, index) => {
       return {
         key: `option-${index}`,
@@ -64,9 +36,6 @@ export class ExportDropdown extends Component {
       
       <Grid>
         <Grid.Column width={14}>
-        {data.hits && data.hits.length > 0 && (
-       <StumbleItem result={data.hits}  /> 
-        )}  
         </Grid.Column>
         <Grid.Column width={11}>
           <Dropdown
