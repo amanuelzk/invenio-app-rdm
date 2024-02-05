@@ -40,13 +40,13 @@
           aria-expanded="false"
           aria-haspopup="menu"
         >
-          <i class="fitted plus icon inverted" aria-hidden="true"></i>
+          <i class="fquick-create-dropdown-btnitted plus icon inverted" aria-hidden="true"></i>
           <i class="fitted dropdown icon inverted" aria-hidden="true"></i>
         </a>
 
         <div role="menu" aria-labelledby="quick-create-dropdown-btn" id="quick-create-menu" class="menu">
           {%- for item in plus_menu_items if item.visible %}
-            <a role="menuitem" class="item" href="{{ item.url }}">{{ item.text|safe }}</a>
+          <a class="item" href="{{ item.url }}">{{ item.text|safe }} </a>
           {%- endfor %}
         </div>
       </div>
@@ -64,9 +64,69 @@
         </div>
       </div>
     {% endif %}
-
+    <!-- <div id ="react-stumbleNav"></div> -->
     {# Desktop Account dropdown menu #}
     {%- if config.USERPROFILES %}
+    <!-- <h5>HTML Dropdown Example</h5 >
+     -->
+     <!-- <h5>HTML Dropdown Example</h5 > -->
+ 
+     
+      <style>
+        /* Style for the select element */
+        #dropdown {
+          padding: 10px;
+          font-size: 16px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-right: 10px;
+        }
+    
+        /* Style for the label element */
+        label {
+          display: block;
+         
+          font-size: 14px;
+         
+        }
+    
+        /* Style for the root div element */
+        #root {
+      padding: 10px;
+    
+      border-radius: 1px;
+    }
+      </style>
+      <title>Styled Dropdown Example</title>
+    </head>
+    <body>
+    
+    
+      <div id="root" class="ui form">
+        <div class="field">
+         
+          <select id="dropdown" class="ui dropdown" onchange="sendTo()">
+            <option value=""></option>
+            <option value="publication">Publication</option>
+            <option value="Audio/Video">Audio/Video</option>
+            <option value="all">Full Stumble</option>
+          </select>
+        </div>
+      </div>
+    
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.js"></script>
+ 
+      <script>
+           function sendTo() {
+               var selectedValue = document.getElementById('dropdown').value;
+               
+               // Assuming you have a global function in your React component to handle the value
+               // Adjust the function name and the way you send the data based on your React setup
+               window.sendToReactComponent(selectedValue);
+           }
+       </script>
+      <div id ="react-stumbleNav"></div>
       <div id="user-profile-dropdown" class="ui floating dropdown computer only">
         <button
           id="user-profile-dropdown-btn"
